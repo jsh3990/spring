@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+</head>
+<body>
+
+    <h3>타임리프 문법 if문</h3>
+
+    <!-- 타임리프 문법을 사용하고 싶으면, 속성앞에 th:를 붙임 -->
+
+    <p th:text="${'태그사이에 출력'}"></p>
+    <p>[[${'태그사이에 출력'}]]</p>
+
+    <p>[[${1 == 1}]]</p>
+    <p>[[${1 eq 1}]]</p>
+
+    <p>[[${ true && false }]]</p>
+    <p>[[${ true and false }]]</p>
+
+    <p>[[${ true || false }]]</p>
+    <p>[[${ true or false }]]</p>
+
+    <p>[[${ !true }]]</p>
+    <p>[[${ not true }]]</p>
+
+    <h3>타임리프 변수선언</h3>
+
+    <div th:with="a = 10">
+        [[${a}]]
+    </div>
+
+    <h3>if~else</h3>
+
+    <div th:with="a = 10">
+        <span th:if="${a == 10}">if문 실행됨</span>
+        <span th:unless="${a == 12}">else문 실행됨</span>
+    </div>
+
+    <h3>삼항 연산자</h3>
+    <div th:with="a = '홍길동' ">
+        [[${ a == '홍길동' ? '예' : '아니오'}]]
+    </div>
+
+</body>
+</html>

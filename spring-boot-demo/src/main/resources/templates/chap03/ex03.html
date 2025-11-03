@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+</head>
+<body>
+
+    <h3>타임리프 a링크</h3>
+
+    <th:block th:each="vo : ${list}">
+        <!--
+        <a href="ex03_ok?name=값&age=값">[[${vo.name}]]</a>
+        -->
+
+        <a th:href="@{ex03_ok(name=${vo.name}, age=${vo.age})}">[[${vo.name}]]</a>
+
+        <br>
+    </th:block>
+
+
+
+</body>
+</html>

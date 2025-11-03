@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+</head>
+<body>
+
+    <h3>타임리프 반복문</h3>
+
+    <ul>
+        <li th:each="vo : ${list}">
+            [[${vo.name}]]
+            ,
+            [[${vo.age}]]
+            ,
+            [[${vo.regdate}]]
+        </li>
+    </ul>
+
+    <h3>타임리프 반복문, status객체</h3>
+    <ul>
+        <li th:each="vo, status : ${list}">
+            일련번호 [[${status.count}]]
+            ,
+            [[${vo.name}]]
+            ,
+            [[${vo.age}]]
+            ,
+            [[${vo.regdate}]]
+        </li>
+    </ul>
+
+    <h3>list의 age값이 짝수인 경우만 li태그로 출력(타임리프 속성은 하나의 태그에  여러 개 사용 가능)</h3>
+
+    <ul>
+        <li th:each="vo : ${list}" th:if="${vo.age % 2 == 0}">
+            [[${vo}]]
+        </li>
+    </ul>
+
+    <hr>
+    <h3>타임리프 block태그 - 중괄호처럼 실행되는 가짜 태그를 만들 수 있음</h3>
+
+    <ul>
+        <th:block th:each="vo : ${list}">
+            <li>[[${vo.name}]]</li>
+        </th:block>
+    </ul>
+</body>
+</html>

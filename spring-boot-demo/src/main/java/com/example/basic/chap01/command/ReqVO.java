@@ -9,16 +9,20 @@ public class ReqVO {
     private String id;
     private String pw;
     private String name;
+    private String email;
+    private String agree;
     private ArrayList<String> inter;
 
 
     //alt+ insert -> 컨스트럭터
     //2. 생성자는 기본생성자, 멤버변수 개수만한 생성자
     public ReqVO() {}
-    public ReqVO(String id, String pw, String name, ArrayList<String> inter) {
+    public ReqVO(String id, String pw, String name, String email, String agree, ArrayList<String> inter) {
         this.id = id;
         this.pw = pw;
         this.name = name;
+        this.email = email;
+        this.agree = agree;
         this.inter = inter;
     }
 
@@ -28,7 +32,9 @@ public class ReqVO {
                 "id='" + id + '\'' +
                 ", pw='" + pw + '\'' +
                 ", name='" + name + '\'' +
-                ", inter=" + inter +
+                ", inter=" + inter + '\'' +
+                ", email='" + email  + '\'' +
+                ", agree='" + agree +
                 '}';
     }
 
@@ -55,6 +61,22 @@ public class ReqVO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getAgree() {
+        return agree;
+    }
+
+    public void setAgree(String agree) {
+        this.agree = agree;
     }
 
     public ArrayList<String> getInter() {

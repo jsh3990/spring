@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+</head>
+<body>
+
+    <h3>데이터를 자바스크립트로 받기 th:inline</h3>
+
+    <script th:inline="javascript">
+
+        //th:inline은 자바의 object를js의 object로 변경해줌
+
+        let name = `[[${name}]]`;
+        let arr = `[[${arr}]]`;
+
+        console.log(name);
+        console.log(arr);
+
+        let result = JSON.parse(arr);
+        console.log(result);
+
+    </script>
+
+    <hr>
+    <h3>타임리프의 유틸리티 문법 (다양한 자바함수를 활용할 수 있는 구문을 제공)</h3>
+
+    [[${regdate}]]
+    <br>
+    [[${#temporals.format(regdate, 'yyyy년MM월dd일HH시mm분ss초')}]]
+
+</body>
+</html>

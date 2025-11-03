@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Books (chap02)</title>
+    <style>
+        body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; margin: 16px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 6px 8px; text-align: left; }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <h1>Books (chap02)</h1>
+    <p><a href="new">Add Book</a></p>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="vo : ${list}">
+                <td>[[${vo.id}]]</td>
+                <td>[[${vo.title}]]</td>
+                <td>[[${vo.author}]]</td>
+                <td>
+                    <form action="bookDelete" method="post">
+                        <!-- 아이디를 숨겨서 보내는 방법 -->
+                        <input type="hidden" name="id" th:value="${vo.id}">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
+
+

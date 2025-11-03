@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coding404.myweb.topic.TopicMapper">
+
+    <insert id="topicRegist" parameterType="TopicVO">
+        INSERT INTO TOPIC(TOPIC_ID,
+                            TOPIC_REGDATE,
+                            TOPIC_USER_ID,
+                            TOPIC_TITLE,
+                            TOPIC_CONTENT)
+        VALUES (#{topicId},
+                #{topicRegdate},
+                #{topicUserId},
+                #{topicTitle},
+                #{topicContent}
+               )
+    </insert>
+
+    <select id="getList" resultType="TopicVO" parameterType="string">
+        SELECT *
+        FROM TOPIC
+        WHERE TOPIC_USER_ID = #{topicUserId}
+        ORDER BY TOPIC_ID DESC
+    </select>
+
+    <update id="topicUpdate" parameterType="TopicVO">
+        UPDATE TOPIC
+        SET TOPIC_REGDATE = #{topicRegdate},
+            TOPIC_USER_ID = #{topicUserId},
+            TOPIC_TITLE = #{topicTitle},
+            TOPIC_CONTENT = #{topicContent}
+        WHERE TOPIC_ID = #{topicId}
+    </update>
+
+    <delete id="topicDelete" parameterType="long">
+        DELETE FROM TOPIC
+        WHERE TOPIC_ID = #{topicId}
+    </delete>
+
+</mapper>

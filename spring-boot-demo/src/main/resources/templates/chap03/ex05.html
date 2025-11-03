@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+</head>
+<body>
+
+    <th:block th:replace="~{./include/layout :: part1}"></th:block>
+
+    헤더 or 푸터 or 공통 영역을 인클루드 할 수 있음
+
+    <th:block th:replace="~{./include/layout :: part2}"></th:block>
+
+    <hr>
+
+    <th:block th:replace="~{./include/layout02}"></th:block>
+
+
+</body>
+</html>

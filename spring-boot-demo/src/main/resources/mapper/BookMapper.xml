@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.basic.chap04.BookMapper">
+
+    <!-- 한 행을 처리할 vo객체의 풀경로를 적어주면 된다 -->
+    <select id="list" resultType="BookVO">
+        SELECT * FROM BOOK ORDER BY ID DESC
+    </select>
+
+    <!--
+        parameterType에는 전달되는 파라미터의 경로를 적으면 됨 (생략가능)
+        파라미터가 있다면 #{게터명} 을 적어준다
+    -->
+    <insert id="bookRegist" parameterType="BookVO">
+        INSERT INTO BOOK(ID, TITLE, AUTHOR) VALUES (BOOK_SEQ.NEXTVAL, #{title}, #{author})
+    </insert>
+
+
+    <!--
+        파라미터가 객체가 아니라 단일값이면, 인터페이스의 매개변수명을 쓰면 된다.
+        ** 마이바티스 파라미터 개수를 기본 1개밖에 받지 못함
+        ** 만약 매개변수가 2개라면 @Param으로 매개변수명을 지정해야함
+    -->
+    <delete id="bookDelete" parameterType="long" >
+        DELETE FROM BOOK WHERE ID = #{id}
+    </delete>
+</mapper>

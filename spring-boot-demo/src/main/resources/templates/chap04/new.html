@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New Book (chap02)</title>
+    <style>
+        body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; margin: 16px; }
+        label { display:block; margin-top: 8px; }
+        input { padding:6px 8px; }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <h1>New Book (chap02)</h1>
+    <form action="bookRegist" method="post">
+        <label for="title">도서명</label>
+        <input id="title" name="title" type="text" required>
+
+        <label for="author">작가</label>
+        <input id="author" name="author" type="text" required>
+
+        <div style="margin-top: 12px;">
+            <button type="submit">Create</button>
+            <a href="list">Cancel(목록)</a>
+        </div>
+    </form>
+</body>
+</html>
+
+
