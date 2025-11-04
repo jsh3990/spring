@@ -15,7 +15,6 @@ public class TopicVO {
     private long topicId;
     private LocalDateTime topicRegdate;
     private String topicWriter;
-    private String topicUserId;
     private String topicTitle;
     private String topicContent;
 }

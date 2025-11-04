@@ -1,8 +1,6 @@
 package com.coding404.myweb.controller;
 
-import com.coding404.myweb.command.ProductVO;
 import com.coding404.myweb.command.TopicVO;
-import com.coding404.myweb.product.ProductServiceImpl;
 import com.coding404.myweb.topic.TopicService;
 import com.coding404.myweb.util.Criteria;
 import com.coding404.myweb.util.PageVO;
@@ -22,19 +20,17 @@ public class TopicController {
     @Autowired
     @Qualifier("topicService")
     private TopicService topicService;
-    @Autowired
-    private ProductServiceImpl productService;
 
     @GetMapping("/topicDetail")
-    public String topicDetail() {
+    public String topicDetail(@RequestParam("topicId") long topicId, Model model) {
+        model.addAttribute("vo", topicService.topicDetail(topicId));
         return "topic/topicDetail";
     }
 
     @GetMapping("topicListAll")
-    public String topicListAll(@ModelAttribute("cri") Criteria cri, Model model) {
-        String topicWriter = "admin";
-        List<TopicVO> topicList = topicService.getList(topicWriter, cri);
-        int total = topicService.getTotal(topicWriter);
+    public String topicListAll(Criteria cri, Model model) {
+        List<TopicVO> topicList = topicService.topicListAll(cri);
+        int total = topicService.getTotal(cri);
         PageVO pageVO = new PageVO(cri, total);
 
         model.addAttribute("topicList", topicList);
@@ -45,18 +41,19 @@ public class TopicController {
     @GetMapping("/topicListMe")
     public String topicListMe(Criteria cri, Model model) {
         String topicWriter = "admin";
-        //List<TopicVO> topicList = topicService.getList(topicWriter);
-        List<TopicVO> topicList = topicService.getList(topicWriter, cri);
-        int total = topicService.getTotal(topicWriter);
+        List<TopicVO> topicList = topicService.topicListMe(topicWriter, cri);
+        int total = topicService.getTotalMe(topicWriter);
         PageVO pageVO = new PageVO(cri, total);
 
-        model.addAttribute("topicList", topicList);
+        model.addAttribute("topicListMe", topicList);
         model.addAttribute("pageVO", pageVO);
         return "topic/topicListMe";
     }
 
     @GetMapping("/topicModify")
-    public String topicModify() {
+    public String topicModify(@RequestParam("topicId") long topicId, Model model) {
+        TopicVO vo = topicService.topicDetail(topicId);
+        model.addAttribute("vo", vo);
         return "topic/topicModify";
     }
 
@@ -66,39 +63,22 @@ public class TopicController {
     }
 
     //글목록
-    @PostMapping("/topicReg")
-    public String topicReg(TopicVO topicVO) {
-        topicService.topicReg(topicVO);
-        return "topic/topicReg";
+    @PostMapping("/topicRegister")
+    public String topicRegister(TopicVO topicVO) {
+        System.out.println(topicVO.toString());
+        topicService.topicRegist(topicVO);
+        return "redirect:/topic/topicListAll";
     }
 
     @PostMapping("/topicModify")
     public String topicModify(TopicVO topicVO) {
         topicService.topicModify(topicVO);
-        return "topic/topicModify";
-    }
-
-    @PostMapping("/topicUpdate")
-    public String topicUpdate(TopicVO topicVO, RedirectAttributes ra) {
-        int result = topicService.topicUpdate(topicVO);
-        if(result == 1) {
-            ra.addFlashAttribute("msg", "상품이 수정 되었습니다.");
-        } else {
-            ra.addFlashAttribute("msg", "상품 수정에 실패했습니다. 관리자 1552-3322로 연락해주세요");
-        }
-        return "redirect:/topic/topicModify?topicId=" + topicVO.getTopicId();
+        return "redirect:/topic/topicListMe";
     }
 
     @PostMapping("/topicDelete")
-    public String productDelete(@RequestParam("topicId") long topicId,
-                                RedirectAttributes ra) {
-
-        int result = topicService.topicDelete(topicId);
-        if(result == 1) {
-            ra.addFlashAttribute("msg", "상품이 삭제되었습니다.");
-        } else {
-            ra.addFlashAttribute("msg", "상품 삭제에 실패했습니다. 관리자 1552-3322로 연락해주세요");
-        }
+    public String topicDelete(TopicVO topicVO) {
+        topicService.topicDelete(topicVO);
         return "redirect:/topic/topicListMe";
     }
 

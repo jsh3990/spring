@@ -4,48 +4,57 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.coding404.myweb.topic.TopicMapper">
-
-    <insert id="topicReg" parameterType="TopicVO">
-        INSERT INTO TOPIC(TOPIC_ID,
-                          TOPIC_WRITER,
-                          TOPIC_REGDATE,
-                          TOPIC_TITLE,
-                          TOPIC_CONTENT)
-        VALUES (#{topicId},
-                #{topicWriter},
-                #{topicRegdate},
-                #{topicTitle},
-                #{topicContent})
+    <insert id="topicRegist" parameterType="TopicVO">
+        INSERT INTO TOPIC(TOPIC_REGDATE, TOPIC_WRITER, TOPIC_TITLE, TOPIC_CONTENT)
+        VALUES (#{topicRegdate}, #{topicWriter}, #{topicTitle}, #{topicContent})
     </insert>
 
-
-    <update id="topicModify" parameterType="TopicVO">
-        UPDATE topic
-        SET topic_title = #{topicTitle},
-            topic_content = #{topicContent}
-        WHERE topic_id = #{topicId}
-    </update>
-
-    <select id="getList" resultType="TopicVO">
-        SELECT *
-        FROM TOPIC
-        WHERE TOPIC_WRITER = #{topicWriter}
-        ORDER BY TOPIC_ID DESC
-        LIMIT #{cri.pageStart}, #{cri.amount}
-    </select>
+    <select id="topicListAll" resultType="TopicVO">
+        SELECT * FROM TOPIC
+        <where>
+            <if test="searchName != '' and searchName != null">
+                AND TOPIC_TITLE LIKE CONCAT('%', #{searchName}, '%')
+            </if>
+            <if test="searchWriter != '' and searchWriter != null">
+                AND TOPIC_WRITER LIKE CONCAT('%', #{searchWriter}, '%')
+            </if>
+        </where>
+        ORDER BY TOPIC_REGDATE DESC
+        LIMIT #{pageStart}, #{amount} </select>
 
     <select id="getTotal" resultType="int">
-        SELECT COUNT(*)
-        FROM TOPIC
+        SELECT COUNT(*) AS total FROM TOPIC
+        <where>
+            <if test="searchName != '' and searchName != null">
+                AND TOPIC_TITLE LIKE CONCAT('%', #{searchName}, '%')
+            </if>
+            <if test="searchWriter != '' and searchWriter != null">
+                AND TOPIC_WRITER LIKE CONCAT('%', #{searchWriter}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="getTotalMe" resultType="int" parameterType="string">
+        SELECT COUNT(*) AS total FROM TOPIC
         WHERE TOPIC_WRITER = #{topicWriter}
     </select>
 
-    <update id="topicUpdate" parameterType="TopicVO">
+    <select id="topicListMe" resultType="TopicVO">
+        SELECT * FROM TOPIC
+        WHERE TOPIC_WRITER = #{topicWriter}
+        ORDER BY TOPIC_REGDATE DESC
+            LIMIT #{cri.pageStart}, #{cri.amount}
+    </select>
+
+    <select id="topicDetail" resultType="TopicVO" parameterType="long">
+        SELECT * FROM TOPIC
+        WHERE TOPIC_ID = #{topicId}
+    </select>
+
+    <update id="topicModify" parameterType="TopicVO">
         UPDATE TOPIC
-        SET TOPIC_REGDATE = #{topicRegdate},
-            TOPIC_WRITER = #{topicWriter},
-            TOPIC_TITLE = #{topicTitle},
-            TOPIC_CONTENT = #{topicContent}
+        SET TOPIC_WRITER = #{topicWriter},
+            TOPIC_TITLE = #{topicTitle}, TOPIC_CONTENT = #{topicContent}
         WHERE TOPIC_ID = #{topicId}
     </update>
 
@@ -53,5 +62,4 @@
         DELETE FROM TOPIC
         WHERE TOPIC_ID = #{topicId}
     </delete>
-
 </mapper>

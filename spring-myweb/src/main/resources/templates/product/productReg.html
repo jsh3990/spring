@@ -231,8 +231,8 @@
                                                 
                                             </table>
                                             <div class="btn_area">
-                                                <input type="submit" class="save" id="save" value="등록">
-                                            	<input type="button" class="delete" id="revise" value="목록">
+                                                <input type="submit" class="save" value="등록">
+                                            	<input type="button" class="delete" value="목록">
                                                 <!-- 
                                                 <a href="#" class="save">등록</a>
                                                 <a href="#" class="delete">목록</a>
@@ -264,21 +264,4 @@
     </div>
 
 </th:block>
-
-<script>
-    let writeBtn = document.getElementById("save");
-    writeBtn.addEventListener("click", function () {
-        event.preventDefault();
-        document.actionForm.action = "ProductList";
-        document.actionForm.submit();
-    })
-
-    let listBtn = document.getElementById("revise");
-    listBtn.addEventListener("click", function() {
-        event.preventDefault();
-        document.actionForm.action = "productList";
-        document.actionForm.submit();
-    });
-</script>
-
 </html>

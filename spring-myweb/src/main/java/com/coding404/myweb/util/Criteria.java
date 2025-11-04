@@ -13,6 +13,7 @@ public class Criteria {
     private String searchPrice;
     private String startDate;
     private String endDate;
+    private String searchWriter;
 
     //기본 생성자
     private Criteria() {

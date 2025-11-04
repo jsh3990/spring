@@ -13,8 +13,33 @@ public class TopicServiceImpl implements TopicService{
     private TopicMapper topicMapper;
 
     @Override
-    public int topicReg(TopicVO topicVO) {
-        return topicMapper.topicReg(topicVO);
+    public int topicRegist(TopicVO topicVO) {
+        return topicMapper.topicRegist(topicVO);
+    }
+
+    @Override
+    public List<TopicVO> topicListAll(Criteria cri) {
+        return topicMapper.topicListAll( cri);
+    }
+
+    @Override
+    public int getTotal(Criteria cri) {
+        return topicMapper.getTotal(cri);
+    }
+
+    @Override
+    public int getTotalMe(String topicWriter) {
+        return topicMapper.getTotalMe(topicWriter);
+    }
+
+    @Override
+    public List<TopicVO> topicListMe(String topicWriter, Criteria cri) {
+        return topicMapper.topicListMe(topicWriter, cri);
+    }
+
+    @Override
+    public TopicVO topicDetail(long topicId) {
+        return topicMapper.topicDetail(topicId);
     }
 
     @Override
@@ -23,27 +48,7 @@ public class TopicServiceImpl implements TopicService{
     }
 
     @Override
-    public List<TopicVO> getList(String topicWriter, Criteria cri) {
-        return topicMapper.getList(topicWriter, cri);
-    }
-
-    @Override
-    public TopicVO getDetail(long topicId) {
-        return topicMapper.getDetail(topicId);
-    }
-
-    @Override
-    public int topicDelete(long topicId) {
-        return topicMapper.topicDelete(topicId);
-    }
-
-    @Override
-    public int topicUpdate(TopicVO topicVO) {
-        return topicMapper.topicUpdate(topicVO);
-    }
-
-    @Override
-    public int getTotal(String topicWriter) {
-        return topicMapper.getTotal(topicWriter);
+    public int topicDelete(TopicVO topicVO) {
+        return topicMapper.topicDelete(topicVO);
     }
 }

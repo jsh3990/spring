@@ -22,74 +22,71 @@ public class ProductController {
     @Qualifier("productService")
     private ProductService productService;
 
-    //목록화면
-    @GetMapping("/productList")
-    public String productList(@ModelAttribute("cri") Criteria cri, Model model) {
-
-        System.out.println(cri.toString());
-
-        String prodWriter = "abc123"; //본인의 아이디라고 가정
-        //List<ProductVO> prodList = productService.getList(prodWriter); //조회
-        List<ProductVO> prodList  = productService.getList(prodWriter, cri); //조회
-        int total = productService.getTotal(prodWriter, cri); //전체게시글 수
-        PageVO pageVO = new PageVO(cri, total); //페이지네이션 계산
-
-        model.addAttribute("prodList",prodList); //모델에 저장
-        model.addAttribute("pageVO",pageVO); //모델에 저장
-
-        return "product/productList";
-    }
-    //등록화면
-    @GetMapping("/productReg")
-    public String productReg() {
-        return "product/productReg";
-    }
     //상세화면
     @GetMapping("/productDetail")
-    public String productDetail(@RequestParam("prodId") long prodId,
-                                Model model) {
-        ProductVO vo = productService.getDetail(prodId);
-        model.addAttribute("vo", vo);
-        return "product/productDetail";
+    public String productDetail(@RequestParam("prodId") long prodId, Model model) {
+        System.out.println("상품의 아이디: " + prodId);
+
+        model.addAttribute("vo", productService.getDetail(prodId));
+        return "/product/productDetail";
     }
+
+    //목록화면
+    @GetMapping("/productList")
+    public String productList(Criteria cri, Model model){
+        System.out.println(cri);
+
+        String prodWriter = "decoy"; // 본인의 아이디라고 가정
+        //List<ProductVO> list = productService.getList(prodWriter);
+        List<ProductVO> list = productService.getList(prodWriter, cri);
+
+        int total = productService.getTotal(prodWriter, cri);
+        PageVO pageVO = new PageVO(cri,total); // 페이지네이션 계산
+
+        model.addAttribute("list",list);
+        model.addAttribute("pageVO",pageVO);
+
+        return "/product/productList";
+    }
+
+    //등록화면
+    @GetMapping("/productReg")
+    public String productReg(){
+        return "/product/productReg";
+    }
+
     //상품등록
     @PostMapping("/prodRegist")
     public String prodRegist(ProductVO productVO,
-                             RedirectAttributes ra) {
-
-        int result = productService.prodRegist(productVO); //성공시 1, 실패시 0
-        if(result == 1) {
+                             RedirectAttributes ra){
+        System.out.println(productVO.toString());
+        int result = productService.prodRegist(productVO); // 성공시 1, 실패시 0
+        if(result == 1){
             ra.addFlashAttribute("msg", "상품이 정상 등록 되었습니다.");
-        } else {
-            ra.addFlashAttribute("msg", "상품 등록에 실패했습니다. 관리자 1552-3322로 연락해주세요");
+        }else{
+            ra.addFlashAttribute("msg", "상품 등록에 실패했습니다.");
         }
-
         return "redirect:/product/productList";
-
     }
+
     //상품수정
-    @PostMapping("/productUpdate")
-    public String productUpdate(ProductVO productVO, RedirectAttributes ra) {
-        int result = productService.prodUpdate(productVO); //성공시 1, 실패시 0
-        if(result == 1) {
-            ra.addFlashAttribute("msg", "상품이 수정 되었습니다.");
-        } else {
-            ra.addFlashAttribute("msg", "상품 수정에 실패했습니다. 관리자 1552-3322로 연락해주세요");
-        }
-        return "redirect:/product/productDetail?prodId=" + productVO.getProdId(); //수정 이후에 상세화면으로
+    @PostMapping("/prodUpdate")
+    public String prodUpdate(ProductVO productVO){
+        int result = productService.prodUpdate(productVO); // 성공시 1, 실패시 0
+        return "redirect:/product/productDetail?prodId=" + productVO.getProdId();
     }
 
     //상품삭제
-    @PostMapping("/productDelete")
-    public String productDelete(@RequestParam("prodId") long prodId,
-                                RedirectAttributes ra) {
-
+    @PostMapping("/prodDelete")
+    public String prodDelete(@RequestParam("prodId") long prodId,
+                             RedirectAttributes ra){
         int result = productService.prodDelete(prodId);
-        if(result == 1) {
-            ra.addFlashAttribute("msg", "상품이 삭제되었습니다.");
-        } else {
-            ra.addFlashAttribute("msg", "상품 삭제에 실패했습니다. 관리자 1552-3322로 연락해주세요");
+        if(result == 1){
+            ra.addFlashAttribute("msg", "상품이 삭제 되었습니다");
+        }else{
+            ra.addFlashAttribute("msg", "상품 삭제를 실패했습니다");
         }
+
         return "redirect:/product/productList";
     }
 }
