@@ -27,12 +27,66 @@
                )
     </insert>
 
-    <select id="getList" resultType="ProductVO" parameterType="string">
+    <!-- 파라미터 2개 이상이면 paramType 생략 -->
+    <!--
+        동적쿼리 구문
+        if, choose, foreach가 있음
+        if구문의 test에는 getter명이 들어갈 수 있음
+    -->
+    <select id="getList" resultType="ProductVO" >
         SELECT *
         FROM PRODUCT
         WHERE PROD_WRITER = #{prodWriter}
-        ORDER BY PROD_ID DESC
-        LIMIT 0, 10
+        <if test="cri.searchName != '' and cri.searchName != null ">
+            AND PROD_NAME LIKE CONCAT('%', #{cri.searchName}, '%')
+        </if>
+        <if test="cri.searchContent != '' and cri.searchContent != null ">
+            AND PROD_CONTENT LIKE CONCAT('%', #{cri.searchContent}, '%')
+        </if>
+        <if test="cri.startDate != '' and cri.startDate != null ">
+             <![CDATA[
+             AND PROD_ENDDATE >= #{cri.startDate}
+             ]]>
+        </if>
+        <if test="cri.endDate != '' and cri.endDate != null ">
+            <![CDATA[
+            AND PROD_ENDDATE <= #{cri.endDate}
+            ]]>
+        </if>
+
+        ORDER BY
+        <if test="cri.searchPrice == 'asc' ">
+            PROD_PRICE ASC,
+        </if>
+        <if test="cri.searchPrice == 'desc' ">
+            PROD_PRICE DESC,
+        </if>
+        PROD_ID DESC
+
+        LIMIT #{cri.pageStart}, #{cri.amount}
+    </select>
+
+    <select id="getTotal" resultType="int" parameterType="string">
+        SELECT COUNT(*) AS total
+        FROM PRODUCT
+        WHERE PROD_WRITER = #{prodWriter}
+        <if test="cri.searchName != '' and cri.searchName != null ">
+            AND PROD_NAME LIKE CONCAT('%', #{cri.searchName}, '%')
+        </if>
+        <if test="cri.searchContent != '' and cri.searchContent != null ">
+            AND PROD_CONTENT LIKE CONCAT('%', #{cri.searchContent}, '%')
+        </if>
+        <if test="cri.startDate != '' and cri.startDate != null ">
+            <![CDATA[
+             AND PROD_ENDDATE >= #{cri.startDate}
+             ]]>
+        </if>
+        <if test="cri.endDate != '' and cri.endDate != null ">
+            <![CDATA[
+            AND PROD_ENDDATE <= #{cri.endDate}
+            ]]>
+        </if>
+
     </select>
 
     <select id="getDetail">

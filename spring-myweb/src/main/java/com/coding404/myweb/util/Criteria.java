@@ -7,6 +7,12 @@ public class Criteria {
 
     private int page; //현재 페이지 번호
     private int amount; //데이터 개수
+    //검색에 사용할 키워드 추가
+    private String searchName;
+    private String searchContent;
+    private String searchPrice;
+    private String startDate;
+    private String endDate;
 
     //기본 생성자
     private Criteria() {
@@ -20,7 +26,7 @@ public class Criteria {
     }
 
     //limit의 함수의 offset값 계산하는 getter
-    public int pageStart() {
+    public int getPageStart() {
         return (page - 1) * amount;
     }
 }

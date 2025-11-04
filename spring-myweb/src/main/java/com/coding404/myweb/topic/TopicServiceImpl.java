@@ -1,6 +1,7 @@
 package com.coding404.myweb.topic;
 
 import com.coding404.myweb.command.TopicVO;
+import com.coding404.myweb.util.Criteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,13 +13,18 @@ public class TopicServiceImpl implements TopicService{
     private TopicMapper topicMapper;
 
     @Override
-    public int topicRegist(TopicVO topicVO) {
-        return topicMapper.topicRegist(topicVO);
+    public int topicReg(TopicVO topicVO) {
+        return topicMapper.topicReg(topicVO);
     }
 
     @Override
-    public List<TopicVO> getList(String topicWriter) {
-        return topicMapper.getList(topicWriter);
+    public int topicModify(TopicVO topicVO) {
+        return topicMapper.topicModify(topicVO);
+    }
+
+    @Override
+    public List<TopicVO> getList(String topicWriter, Criteria cri) {
+        return topicMapper.getList(topicWriter, cri);
     }
 
     @Override
@@ -34,5 +40,10 @@ public class TopicServiceImpl implements TopicService{
     @Override
     public int topicUpdate(TopicVO topicVO) {
         return topicMapper.topicUpdate(topicVO);
+    }
+
+    @Override
+    public int getTotal(String topicWriter) {
+        return topicMapper.getTotal(topicWriter);
     }
 }

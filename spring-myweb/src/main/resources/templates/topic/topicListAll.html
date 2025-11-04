@@ -1,5 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" type="text/css" href="../css/modal.css" />
+
 <th:block th:replace="~{./include/baseLayout :: setContent(~{:: .wrap})}">
 
 	<div class="wrap">
@@ -20,18 +22,22 @@
 					</div>
 					<div class="page_title">관리자검색</div>
 					
-					<form name="###########" action="############" method="get" >
+					<form name="actionForm" action="topicListAll" method="get" >
+
+                    <input type="hidden" name="page" value="1">
+                    <input type="hidden" name="amount" th:value="${pageVO.amount}">
+
 					<div class="search_block flfull">
 
 						<div class="fl">
 							<div>
 								<span class="search_th">제목 검색</span>
-								<input type="text" class="" placeholder="제목 검색">
+								<input type="text" class="" name="searchContent" th:value="${cri.searchContent}" placeholder="제목 검색">
 							</div>
 
 							<div>
 								<span class="search_th">닉네임 검색</span>
-								<input type="text" class="" placeholder="닉네임 검색">
+								<input type="text" class="" name="searchName" th:value="${cri.searchName}" placeholder="닉네임 검색">
 							</div>
 
 							<!-- 
@@ -98,19 +104,42 @@
 
 										<div class="page">
 											<ul>
-												<li><a href="#"><i class="fa fa-angle-double-left"
-															aria-hidden="true"></i></a></li>
-												<li style="margin-right:5px;"><a href="#"><i class="fa fa-angle-left"
-															aria-hidden="true"></i></a></li>
-												<li class="on"><a href="#">1</a></li>
-												<li><a href="#">2</a></li>
-												<li><a href="#">3</a></li>
-												<li><a href="#">4</a></li>
-												<li><a href="#">5</a></li>
-												<li style="margin-left:5px;"><a href="#"><i class="fa fa-angle-right"
-															aria-hidden="true"></i></a></li>
-												<li><a href="#"><i class="fa fa-angle-double-right"
-															aria-hidden="true"></i></a></li>
+												<li>
+                                                    <a th:href="@{topicListAll(page=1, amount=${pageVO.amount},
+                                                                                searchName=${cri.searchName},
+                                                                                searchContent=${cri.Content} )}"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a>
+                                                </li>
+
+                                                <th:block th:if="${pageVO.prev}">
+												<li style="margin-right:5px;">
+                                                    <a th:href="@{topicListAll(page=${pageVO.start - 1}, amount=${pageVO.amount},
+                                                                               searchName=${cri.searchName},
+                                                                               searchContent=${cri.searchContent} )}"><i class="fa fa-angle-left" aria-hidden="true"></i></a>
+                                                </li>
+                                                </th:block>
+
+                                                <th:block th:each="page : ${pageVO.pageList}">
+												<li th:class="${pageVO.page == page ? 'on' : ''}">
+                                                    <a th:href="@{topicListAll(page=${page}, amount=${pageVO.amount},
+                                                                               searchName=${cri.searchName},
+                                                                               searchContetn=${cri.searchContent} )}">[[${page}]]</a>
+                                                </li>
+                                                </th:block>
+
+                                                <th:block th:if="${pageVO.next}">
+
+												<li style="margin-left:5px;">
+                                                    <a th:href="@{topicListAll(page=${pageVO.end + 1}, amount=${pageVO.amount},
+                                                                               searchName=${cri.searchName},
+                                                                               searchContent=${cri.searchContent} )}"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
+                                                </li>
+                                                </th:block>
+
+												<li>
+                                                    <a th:href="@{topicListAll(page=${pageVO.realEnd}, amount=${pageVO.amount},
+                                                                               searchName=${cri.searchName},
+                                                                               searchContent=${cri.searchContent} )}"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+                                                </li>
 											</ul>
 										</div>
 									</li>
@@ -130,7 +159,7 @@
 			<div class="modal-content">
 				<div class="modalOff">X</div>
 				<p class="title">이미지수정</p>
-	
+
 				<div class="content">
 					<div class="sub-form">
 						<!--미리보기 폼-->
@@ -148,7 +177,7 @@
 									<input type="hidden" value="">
 									<input type="hidden" value="">
 									<button type="button" class="normal_btn" style="display: block;">삭제</button>
-									
+
 							</div>
 							<div class="left">
 									<span>추가이미지</span>
@@ -180,7 +209,7 @@
 					</div>
 					</div>
 				</div>
-	
+
 
 				<div class="btn_area">
 					<a href="수정!!" class="save" >수정</a>

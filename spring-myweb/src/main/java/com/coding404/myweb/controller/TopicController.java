@@ -4,14 +4,13 @@ import com.coding404.myweb.command.ProductVO;
 import com.coding404.myweb.command.TopicVO;
 import com.coding404.myweb.product.ProductServiceImpl;
 import com.coding404.myweb.topic.TopicService;
+import com.coding404.myweb.util.Criteria;
+import com.coding404.myweb.util.PageVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -27,27 +26,32 @@ public class TopicController {
     private ProductServiceImpl productService;
 
     @GetMapping("/topicDetail")
-    public String topicDetail(Model model) {
-        List<TopicVO> list = topicService.getList("admin");
-        model.addAttribute("topicList", list);
+    public String topicDetail() {
         return "topic/topicDetail";
     }
 
     @GetMapping("topicListAll")
-    public String topicListAll(Model model) {
+    public String topicListAll(@ModelAttribute("cri") Criteria cri, Model model) {
         String topicWriter = "admin";
-        List<TopicVO> topicList = topicService.getList(topicWriter);
-        model.addAttribute("topicList", topicList);
+        List<TopicVO> topicList = topicService.getList(topicWriter, cri);
+        int total = topicService.getTotal(topicWriter);
+        PageVO pageVO = new PageVO(cri, total);
 
-        System.out.println(topicList.toString());
+        model.addAttribute("topicList", topicList);
+        model.addAttribute("pageVO", pageVO);
         return "topic/topicListAll";
     }
 
     @GetMapping("/topicListMe")
-    public String topicListMe(Model model) {
+    public String topicListMe(Criteria cri, Model model) {
         String topicWriter = "admin";
-        List<TopicVO> topicList = topicService.getList(topicWriter);
+        //List<TopicVO> topicList = topicService.getList(topicWriter);
+        List<TopicVO> topicList = topicService.getList(topicWriter, cri);
+        int total = topicService.getTotal(topicWriter);
+        PageVO pageVO = new PageVO(cri, total);
+
         model.addAttribute("topicList", topicList);
+        model.addAttribute("pageVO", pageVO);
         return "topic/topicListMe";
     }
 
@@ -62,10 +66,16 @@ public class TopicController {
     }
 
     //글목록
-    @PostMapping("/topicRegist")
-    public String topicRegist(TopicVO topicVO) {
-        topicService.topicRegist(topicVO);
-        return "redirect:/topic/topicListAll";
+    @PostMapping("/topicReg")
+    public String topicReg(TopicVO topicVO) {
+        topicService.topicReg(topicVO);
+        return "topic/topicReg";
+    }
+
+    @PostMapping("/topicModify")
+    public String topicModify(TopicVO topicVO) {
+        topicService.topicModify(topicVO);
+        return "topic/topicModify";
     }
 
     @PostMapping("/topicUpdate")
@@ -83,7 +93,7 @@ public class TopicController {
     public String productDelete(@RequestParam("topicId") long topicId,
                                 RedirectAttributes ra) {
 
-        int result =topicService.topicDelete(topicId);
+        int result = topicService.topicDelete(topicId);
         if(result == 1) {
             ra.addFlashAttribute("msg", "상품이 삭제되었습니다.");
         } else {
@@ -91,4 +101,7 @@ public class TopicController {
         }
         return "redirect:/topic/topicListMe";
     }
+
+
+
 }

@@ -2,15 +2,14 @@ package com.coding404.myweb.controller;
 
 import com.coding404.myweb.command.ProductVO;
 import com.coding404.myweb.product.ProductService;
+import com.coding404.myweb.util.Criteria;
+import com.coding404.myweb.util.PageVO;
 import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -25,12 +24,18 @@ public class ProductController {
 
     //목록화면
     @GetMapping("/productList")
-    public String productList(Model model) {
-        String prodWriter = "abc123"; //본인의 아이디라고 가정
-        List<ProductVO> prodList = productService.getList(prodWriter); //조회
-        model.addAttribute("prodList", prodList); //모델에 저장
+    public String productList(@ModelAttribute("cri") Criteria cri, Model model) {
 
-        System.out.println(prodList.toString());
+        System.out.println(cri.toString());
+
+        String prodWriter = "abc123"; //본인의 아이디라고 가정
+        //List<ProductVO> prodList = productService.getList(prodWriter); //조회
+        List<ProductVO> prodList  = productService.getList(prodWriter, cri); //조회
+        int total = productService.getTotal(prodWriter, cri); //전체게시글 수
+        PageVO pageVO = new PageVO(cri, total); //페이지네이션 계산
+
+        model.addAttribute("prodList",prodList); //모델에 저장
+        model.addAttribute("pageVO",pageVO); //모델에 저장
 
         return "product/productList";
     }

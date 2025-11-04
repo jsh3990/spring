@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+<!--<link rel="stylesheet" type="text/css" href="../css/modal.css" />-->
 <th:block th:replace="~{./include/baseLayout :: setContent(~{:: .wrap})}">
 
     <div class="wrap">
@@ -54,9 +55,8 @@
 
                                             </table>
                                             <div class="btn_area">
-                                                <input type="button" class="write" value="등록하러가기">
-                                            	<input type="button" class="list" value="전체목록으로">
-
+                                                <a href="" class="save" id="save">등록하러가기</a>
+                                                <a href="" class="revise" id="revise">전체목록으로</a>
                                             </div>
                                         </li>
 
@@ -75,15 +75,15 @@
 
 </th:block>
 <script>
-    let writeBtn = document.querySelector("save");
+    let writeBtn = document.getElementById("save");
     writeBtn.addEventListener("click", function () {
         event.preventDefault();
-        document.actionForm.action = "topicModify";
+        document.actionForm.action = "topicReg";
         document.actionForm.submit();
     })
 
-    let listBtn = document.getElementById("list");
-    deleteBtn.addEventListener("click", function() {
+    let listBtn = document.getElementById("revise");
+    listBtn.addEventListener("click", function() {
         event.preventDefault();
         document.actionForm.action = "topicListAll";
         document.actionForm.submit();
