@@ -1,8 +1,10 @@
 package com.coding404.myweb.command;
 
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 //@Getter
 //@Setter
@@ -24,5 +26,8 @@ public class ProductVO {
     private String prodPurchaseYn;
     private String prodContent;
     private String prodComment;
+
+    //조인된 컬럼 결과 - 단순히 가져갈 컬럼이 1개
+    private String categoryNav;
 
 }

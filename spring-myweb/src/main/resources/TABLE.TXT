@@ -20,3 +20,13 @@ CREATE TABLE TOPIC(
     TOPIC_TITLE VARCHAR(20) NOT NULL,
     TOPIC_CONTENT VARCHAR(5000)
 );
+
+CREATE TABLE PRODUCT_UPLOAD (
+	UPLOAD_NO INT PRIMARY KEY auto_increment,
+	FILENAME varchar(100) not null, ##실제파일명
+	FILEPATH varchar(100) not null, ##폴더명
+	UUID varchar(50) not null, ##UUID명
+	REGDATE TIMESTAMP default now(),
+	PROD_ID INT, ##FK
+	PROD_WRITER VARCHAR(20) ##FK
+);

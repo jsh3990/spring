@@ -34,9 +34,9 @@
                                                 <tr>
                                                     <th>카테고리</th>
 
-                                                    <td colspan="5">
+                                                    <td  colspan="5">
                                                         <div>수정이 불가능한 옵션입니다(상품관리자에게 문의하세요)</div>
-                                                        대분류 > 중분류 > 소분류
+                                                        [[${vo.categoryNav}]]
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -52,42 +52,24 @@
                                                 <tr>
                                                     <th>메인사진</th>
                                                     <td colspan="3">
+
+                                                        [[${fileList}]]
+
                                                         <!--미리보기 폼-->
                                                         <div class="blockContent">
                                                             <div class="productText">이미지 수정은 목록을 이용해주세요</div>
                                                             <div class="productImg">
+
+                                                                <th:block th:each="fileVO : ${fileList}">
                                                                 <div class="imgItem">
                                                                     <span class="imgKind">대표이미지</span>
                                                                     <div class="imgWrap">
                                                                         <div class="imgArea">
-                                                                            <img src="../img/item_main.jpg">
+                                                                            <img th:src="@{/display/{filpath}/{uuid}/{filename}(filepath=${fileVO.getFilepath}, uuid=${fileVO.uuid}, filename=${fileVO.filename} )    }">
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="imgItem">
-                                                                    <span class="imgKind">배너이미지</span>
-                                                                    <div class="imgWrap">
-                                                                        <div class="imgArea">
-                                                                            <img src="../img/item_banner.jpg">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="imgItem">
-                                                                    <span class="imgKind">배너이미지</span>
-                                                                    <div class="imgWrap">
-                                                                        <div class="imgArea">
-                                                                            <img src="../img/item_banner.jpg">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="imgItem">
-                                                                    <span class="imgKind">배너이미지</span>
-                                                                    <div class="imgWrap">
-                                                                        <div class="imgArea">
-                                                                            <img src="../img/item_banner.jpg">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
+                                                                </th:block>
 
                                                             </div>
                                                         </div>

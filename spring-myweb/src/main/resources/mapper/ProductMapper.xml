@@ -29,6 +29,36 @@
               )
     </insert>
 
+    <!--
+        insert전 or 후에 특정 테이블의 키값을 얻을 때 사용한다.
+        order = before, after
+        keyProperty = 조회한 키를 저장할 멤버변수
+        resultType = 반환타입
+
+    -->
+
+    <insert id="fileRegist" parameterType="ProductUploadVO">
+        <selectKey order="BEFORE" resultType="long" keyProperty="prodId">
+            SELECT MAX(PROD_ID) FROM PRODUCT WHERE PROD_WRITER = #{prodWriter}
+        </selectKey>
+        INSERT INTO PRODUCT_UPLOAD(
+        FILENAME,
+        FILEPATH,
+        UUID,
+        PROD_ID,
+        PROD_WRITER
+        )
+        VALUES (
+        #{filename},
+        #{filepath},
+        #{uuid},
+        #{prodId},
+        #{prodWriter}
+        )
+    </insert>
+
+
+
     <!-- 파라미터 2개이상이면 paramType 생략 -->
     <!--
         동적쿼리 구문
@@ -37,7 +67,19 @@
     -->
     <select id="getList" resultType="ProductVO" >
         SELECT *
-        FROM PRODUCT
+        FROM PRODUCT P
+        LEFT JOIN (SELECT CONCAT(A1.group_ID, A1.CATEGORY_ID) AS CATEGORY_KEY, ##카테고리 키 (그룹 + 키 형태로 카테고리분류)
+        CASE A1.category_parent_LV WHEN 0 THEN A1.category_detail_NM
+        WHEN 1 THEN CONCAT(A2.category_detail_NM,' > ', A1.category_detail_NM)
+        WHEN 2 THEN CONCAT(A3.category_detail_NM, ' > ', A2.category_detail_NM,' > ', A1.category_detail_NM)
+        END as CATEGORY_NAV
+        FROM PRODUCT_CATEGORY A1
+        LEFT OUTER JOIN PRODUCT_CATEGORY A2
+        ON A1.CATEGORY_PARENT_LV = A2.CATEGORY_LV AND A1.CATEGORY_DETAIL_PARENT_LV = A2.CATEGORY_DETAIL_LV AND A1.GROUP_ID = A2.GROUP_ID
+        LEFT OUTER JOIN PRODUCT_CATEGORY A3
+        ON A2.CATEGORY_PARENT_LV = A3.CATEGORY_LV AND A2.CATEGORY_DETAIL_PARENT_LV = A3.CATEGORY_DETAIL_LV
+        ORDER BY CATEGORY_NAV ASC) X
+        ON P.PROD_CATEGORY = X.CATEGORY_KEY
         WHERE PROD_WRITER = #{prodWriter}
         <if test="cri.searchName != '' and cri.searchName != null ">
             AND PROD_NAME LIKE CONCAT('%', #{cri.searchName}, '%')
@@ -94,8 +136,26 @@
 
     <select id="getDetail" parameterType="long">
         SELECT *
-        FROM PRODUCT
+        FROM PRODUCT P
+        LEFT JOIN
+            (SELECT CONCAT(A1.group_ID, A1.CATEGORY_ID) AS CATEGORY_KEY, ##카테고리 키 (그룹 + 키 형태로 카테고리분류)
+            CASE A1.category_parent_LV WHEN 0 THEN A1.category_detail_NM
+				WHEN 1 THEN CONCAT(A2.category_detail_NM,' > ', A1.category_detail_NM)
+				WHEN 2 THEN CONCAT(A3.category_detail_NM, ' > ', A2.category_detail_NM,' > ', A1.category_detail_NM)
+		END as CATEGORY_NAV
+        FROM PRODUCT_CATEGORY A1
+        LEFT OUTER JOIN PRODUCT_CATEGORY A2
+        ON A1.CATEGORY_PARENT_LV = A2.CATEGORY_LV AND A1.CATEGORY_DETAIL_PARENT_LV = A2.CATEGORY_DETAIL_LV AND A1.GROUP_ID = A2.GROUP_ID
+        LEFT OUTER JOIN PRODUCT_CATEGORY A3
+        ON A2.CATEGORY_PARENT_LV = A3.CATEGORY_LV AND A2.CATEGORY_DETAIL_PARENT_LV = A3.CATEGORY_DETAIL_LV
+        ORDER BY CATEGORY_NAV ASC) X
+        ON P.PROD_CATEGORY = X.CATEGORY_KEY
         WHERE PROD_ID = #{prodId}
+    </select>
+
+    <select id="getDetailFile" resultType="ProductUploadVO">
+        SELECT * FROM PRODUCT_UPLOAD WHERE PROD_ID = #{prodId}
+
     </select>
 
     <update id="prodUpdate" parameterType="ProductVO">
@@ -128,6 +188,50 @@
         WHERE GROUP_ID = #{groupId}
         AND CATEGORY_PARENT_LV = #{categoryLv}
         AND CATEGORY_DETAIL_PARENT_LV = #{categoryDetailLv}
+    </select>
+
+    <!-- =====조인 연습===== -->
+    <!--
+        id - 연결될 resultMap 이름
+        type - 반환타입
+        property - 멤버변수명
+        column - 컬럼명
+    -->
+    <resultMap id="manyToOneResult" type="DemoOrderVO">
+        <result column="oid" property="oId" />
+        <result column="mid" property="mId" />
+        <result column="product_name" property="productName" />
+        <association property="memberVO">
+            <result column="mid" property="mId" />
+            <result column="name" property="name" />
+        </association>
+    </resultMap>
+
+    <select id="manyToOne" resultMap="manyToOneResult">
+        SELECT *
+        FROM DEMO_ORDER O
+        LEFT JOIN DEMO_MEMBER M
+        ON O.MID = M.MID
+    </select>
+
+
+    <!-- 1:N 조인 -->
+    <resultMap id="oneToManyResult" type="DemoMemberVO">
+        <result column="mid" property="mId" />
+        <result column="name" property="name" />
+        <collection property="orderVO" ofType="DemoOrderVO">
+            <result column="oid" property="oId" />
+            <result column="mid" property="mId" />
+            <result column="product_name" property="productName" />
+        </collection>
+    </resultMap>
+
+    <select id="oneToMany" resultMap="oneToManyResult">
+        SELECT *
+        FROM DEMO_MEMBER M
+        LEFT JOIN DEMO_ORDER O
+        ON O.MID = M.MID
+        WHERE M.MID = 1
     </select>
 
 </mapper>

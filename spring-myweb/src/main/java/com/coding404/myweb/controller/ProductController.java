@@ -1,5 +1,6 @@
 package com.coding404.myweb.controller;
 
+import com.coding404.myweb.command.ProductUploadVO;
 import com.coding404.myweb.command.ProductVO;
 import com.coding404.myweb.product.ProductService;
 import com.coding404.myweb.util.Criteria;
@@ -9,9 +10,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/product")
@@ -50,16 +53,28 @@ public class ProductController {
                                 Model model) {
 
         ProductVO vo = productService.getDetail(prodId);
+        List<ProductUploadVO> fileList = productService.getDetailFile(prodId);
+
         model.addAttribute("vo",vo);
+        model.addAttribute("fileList",fileList);
 
         return "product/productDetail";
     }
     //상품등록
     @PostMapping("/prodRegist")
     public String prodRegist(ProductVO productVO,
-                             RedirectAttributes ra) {
+                             RedirectAttributes ra,
+                             @RequestParam("file")List<MultipartFile> files) { //파일데이터
 
-        int result = productService.prodRegist(productVO); //성공시1, 실패시 0
+        // 빈 파일 데이터 제거
+        // 멀티파트파일.getContentType() - 이미지 데이터만 올라올 수 있도록 처리
+        files = files.stream()
+                .filter(data -> data.isEmpty() == false)
+                .collect(Collectors.toList());
+
+
+
+        int result = productService.prodRegist(productVO, files); //성공시1, 실패시 0
         if(result == 1) {
             ra.addFlashAttribute("msg", "상품이 정상 등록 되었습니다.");
         } else {
