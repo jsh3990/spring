@@ -58,24 +58,24 @@ public class JPABasic01 {
 //    }
 
     //페이지 객체를 사용해서 select
-//    @Test
-//    public void testCode06() {
-//        //정렬
-//        Sort sort = Sort.by("id").descending();
-//        Sort sort2 = Sort.by("text").ascending();
-//        sort = sort.and(sort2);
-//
-//        Pageable pageable = PageRequest.of(0, 10, sort);
-//        Page<Memo> page = memoRepository.findAll(pageable); //페이지 처리를 한 결과
-//
-//        System.out.println("총 페이지수: " + page.getTotalPages() );
-//        System.out.println("총 데이터수: " + page.getTotalElements() );
-//        System.out.println("현재 페이지 번호: " + page.getNumber() );
-//        System.out.println("데이터 존재여부: " + page.hasContent() );
-//        System.out.println("시작페이지 여부: " + page.isFirst() );
-//        System.out.println("마지막페이지 여부: " + page.isLast() );
-//        System.out.println("데이터 개수: " + page.getSize());
-//        System.out.println("데이터: " + page.getContent().toString() );
-//
-//    }
+    @Test
+    public void testCode06() {
+        //정렬
+        Sort sort = Sort.by("id").descending();
+        Sort sort2 = Sort.by("text").ascending();
+        sort = sort.and(sort2);
+
+        Pageable pageable = PageRequest.of(0, 10, sort);
+        Page<Memo> page = memoRepository.findAll(pageable); //페이지 처리를 한 결과
+
+        System.out.println("총 페이지수: " + page.getTotalPages() );
+        System.out.println("총 데이터수: " + page.getTotalElements() );
+        System.out.println("현재 페이지 번호: " + page.getNumber() );
+        System.out.println("데이터 존재여부: " + page.hasContent() );
+        System.out.println("시작페이지 여부: " + page.isFirst() );
+        System.out.println("마지막페이지 여부: " + page.isLast() );
+        System.out.println("데이터 개수: " + page.getSize());
+        System.out.println("데이터: " + page.getContent().toString() );
+
+    }
 }

@@ -1,7 +1,7 @@
-package com.example.demo.jpa;
+package com.example.spring_jpa_demo.jpa;
 
-import com.example.demo.entity.Memo;
-import com.example.demo.repository.MemoRepository;
+import com.example.spring_jpa_demo.entity.Memo;
+import com.example.spring_jpa_demo.repository.MemoRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

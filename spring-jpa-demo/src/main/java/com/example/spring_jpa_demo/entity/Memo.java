@@ -22,9 +22,14 @@ public class Memo {
     @Column(columnDefinition = "varchar(200) default 'y'") //직접 컬럼 관련 설정을 함
     private String text;
 
-    //매니투원 - N:1조인
+//    //매니투원 - N:1조인
+//    @ManyToOne
+//    @JoinColumn(name = "member_id") //FK member_id를 추가함
+//    private Member member;
+
+    //양방향 맵핑
     @ManyToOne
-    @JoinColumn(name = "member_id") //FK member_id를 추가함
+    @JoinColumn(name="member_id")
     private Member member;
 
 }

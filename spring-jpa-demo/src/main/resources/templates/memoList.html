@@ -85,13 +85,13 @@
 		</tbody>
 	</table>
 
-    <ul class="pagination" id="pagination">
+    <ul class="pagenation" id="pagenation">
         <!-- Pagination buttons will be inserted here by JavaScript -->
-		<a href="#" class="prev">이전</a>
-		<a href="#" class="number">1</a>
-		<a href="#" class="number">2</a>
-		<a href="#" class="number">3</a>
-		<a href="#" class="next">다음</a>
+<!--		<a href="#" class="prev">이전</a>-->
+<!--		<a href="#" class="number">1</a>-->
+<!--		<a href="#" class="number">2</a>-->
+<!--		<a href="#" class="number">3</a>-->
+<!--		<a href="#" class="next">다음</a>-->
     </ul>
 
 
@@ -100,8 +100,84 @@
         //2. 1번을 연결할수 있는 REST API생성
         //3. fetch를 이용해서 2번의 REST API를 호출한 후에 결과를 JS로 tableBody 화면에 처리
         //**** 서비스영역 생략!!! ****
+
+        let page = 1; //조회하는 페이지
+        let amount = 10; //데이터 개수
+        let start = 0; //시작페이지
+        let end = 0; //끝페이지
+
+        let tableBody = document.getElementById("tableBody"); //본문 태그
+        let pagenation = document.getElementById("pagenation"); //페이지네이션 태그
+
         function getList() {
 
+            fetch(url)
+                .then( response => response.json() )
+                .then( data => {
+                    console.log(data);
+                    createBody(data.pageData);
+                    createPage(data); //페이지네이션처리
+                })
+        }
+
+        function createBody(data) {
+            let str = "";
+            data.forEach( item => {
+                str += "<tr>";
+                str += "<td>" + item.id + "</td>"
+                str += "<td>" + item.writer + "</td>"
+                str += "<td>" + item.text +"</td>"
+                str += "</tr>";
+            })
+
+            tableBody.innerHTML = str;
+        }
+
+        function createPage(data) {
+            let pageList = data.pageList; //페이지네이션
+            let prev = data.prev; //이전버튼
+            let next = data.next; //다음버튼
+            start = data.start; //전역번수에 시작페이지 저장
+            end = data.end; //전역변수에 끝페이지 저장
+
+            let str = "";
+            if(prev) {
+                str += "<a href='#' class='prev'>이전</a>"
+            }
+
+            pageList.forEach( item => {
+                str += "<a href='#' class='number'>"+ item +"</a>"
+            })
+
+            if(next) {
+                str += "<a href='#' class='next'>다음</a>"
+            }
+
+            pagenation.innerHTML = str;
+        }
+
+        //페이지네이션 이벤트 - 위임
+        pagenation.addEventListener("click", (e) => {
+
+            e.preventDefault(); //a태그의 기본 이벤트 중단
+            if(e.target.tagName !== "A") return; //A태그가 아니라면 종료
+
+            if(e.target.className === "prev") {
+                page = start - 1; //전역변수(현재 조회하는 페이지)
+            } else if(e.target.className === "number") {
+                page = e.target.innerText;
+            } else if(e.target.className === "next") {
+                page = end + 1;
+            }
+            //데이터 가져오는 함수 호출
+            getList();
+        })
+
+        //검색버튼 이벤트
+        function searchList() {
+            let searchType = document.querySelector("input[name='searchType']").value;
+            let searchName = document.querySelector("input[name='searchName']").value;
+            let url ="/getList?page=" + page + "&amount" + amount + "&searchType=" + searchType + "&searchName=";
         }
 
         //즉시실행 함수

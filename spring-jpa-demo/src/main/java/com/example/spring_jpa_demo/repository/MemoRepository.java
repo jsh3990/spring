@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,7 +14,8 @@ import java.util.List;
 
 //JpaRepository<엔티티, 엔티티의id>
 public interface MemoRepository extends JpaRepository<Memo, Long>, //기본 jpa인터페이스
-                                        MemoCustomRepository //커스텀 레파지토리 사용시
+                                        MemoCustomRepository, //커스텀 레파지토리 사용시
+                                        QuerydslPredicateExecutor<Memo> //쿼리DSL추가 기능을 사용할 수 있게함
 {
 
     //쿼리메서드 - 메서드 이름을 보고 JPA가 sql을 실행시킴
@@ -57,6 +59,7 @@ public interface MemoRepository extends JpaRepository<Memo, Long>, //기본 jpa�
             nativeQuery = true)
     List<Memo> getNativeQuery(Long id);
 
+    //1st
     //JPQL 조인 -> 커스텀 레파지토리에 옮겨도 상관 없음
 //    @Query("select m from Memo m inner join m.member")
 //    List<Memo> mtoJoin1();
