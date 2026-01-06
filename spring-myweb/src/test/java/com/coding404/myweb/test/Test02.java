@@ -12,15 +12,15 @@ import java.util.List;
 @SpringBootTest
 public class Test02 {
 
-    @Autowired
-    ProductMapper productMapper;
-
-    @Test
-    public void test01() {
-//        List<DemoMemberVO> list = productMapper.manyToOne();
-//        System.out.println(list.toString());
-
-        DemoMemberVO member = productMapper.oneToMany();
-        System.out.println(member.toString());
-    }
+//    @Autowired
+//    ProductMapper productMapper;
+//
+//    @Test
+//    public void test01() {
+////        List<DemoMemberVO> list = productMapper.manyToOne();
+//////        System.out.println(list.toString());
+////
+////        DemoMemberVO member = productMapper.oneToMany();
+////        System.out.println(member.toString());
+////    }
 }
